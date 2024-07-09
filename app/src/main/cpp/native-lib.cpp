@@ -7,7 +7,9 @@ extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_upworktask_MainActivity_stringFromJNI(
         JNIEnv* env,
         jobject /* this */) {
-    std::string hello = "i am reading this from cpp";
+//    so this hello string you can write and check just initial one
+// for now lets leave it because it not that important
+    std::string hello = "";
     return env->NewStringUTF(hello.c_str());
 }
 
