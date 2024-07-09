@@ -1,7 +1,10 @@
 folder structure:
  -menifests (this file is responsible for  Permissions Declaration , Application Metadata etc. we don't need and we havent change it from beginning)
+ 
  -java (this folder is responsible for our application all the java codes and our entry point of app resides here)
+ 
  -cpp (this folder is responsible for our c++ side of app our app. it has code which will be called form java using JNI (Java Native Interface).CMakeLists.txt serves as a blueprint for CMake to   manage dependencies)
+ 
  -res ( here it resides the ui of app)
 
 objective:
