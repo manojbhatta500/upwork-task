@@ -33,10 +33,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Example of a call to a native method
-        TextView tv = binding.sampleText;
-        tv.setText(stringFromJNI());
-
         // Check if the file exists and handle accordingly
         File file = new File(getFilesDir(), fileName);
 
@@ -45,10 +41,15 @@ public class MainActivity extends AppCompatActivity {
             showToast("File exists.");
             String fileContent = readFromFile();
             if (fileContent != null) {
-                Log.d("FileContent", fileContent);
                 showToast("File content: " + fileContent);
+                // Call native method to read file content
+                String cppFileContent = readFileFromCpp(getFilesDir().getPath() + "/" + fileName);
+                if (cppFileContent != null) {
+                    showToast("File content read from C++: " + cppFileContent);
+                } else {
+                    showToast("Failed to read file content from C++.");
+                }
             } else {
-                Log.e("FileContent", "Failed to read file.");
                 showToast("Failed to read file.");
             }
         } else {
@@ -56,23 +57,30 @@ public class MainActivity extends AppCompatActivity {
             saveDataToFile("my name is manoj bhatta.");
             String fileContent = readFromFile();
             if (fileContent != null) {
-                Log.d("FileContent", fileContent);
                 showToast("File content: " + fileContent);
+                // Call native method to read file content
+                String cppFileContent = readFileFromCpp(getFilesDir().getPath() + "/" + fileName);
+                if (cppFileContent != null) {
+                    showToast("File content read from C++: " + cppFileContent);
+                } else {
+                    showToast("Failed to read file content from C++.");
+                }
             } else {
-                Log.e("FileContent", "Failed to read file.");
                 showToast("Failed to read file.");
             }
         }
+
+        // Example of a call to a native method
+        TextView tv = binding.sampleText;
+        tv.setText(stringFromJNI());
     }
 
     private void saveDataToFile(String data) {
         try (FileOutputStream fileOutputStream = openFileOutput(fileName, MODE_PRIVATE)) {
             fileOutputStream.write(data.getBytes());
-            Log.d("SaveData", "Data saved to file.");
             showToast("Data saved to file.");
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e("SaveData", "Error saving data to file: " + e.getMessage());
             showToast("Error saving data to file.");
         }
     }
@@ -91,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e("ReadFile", "Error reading file: " + e.getMessage());
             showToast("Error reading file.");
             return null;
         }
@@ -106,4 +113,9 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    /**
+     * A native method to read file content from C++.
+     */
+    public native String readFileFromCpp(String filePath);
 }
